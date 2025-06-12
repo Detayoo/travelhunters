@@ -7,10 +7,12 @@ import { Hotel } from "@/components";
 
 import data from "../../data.json";
 import BudgetSlider from "@/components/BudgetSlider";
+import { useRouter } from "next/router";
 
 const filterables = ["Hotel", "Double Bed", "Apartments", "English"];
 
 const Hotels = () => {
+  const params = useRouter().query;
   const [showFilter, setShowFilter] = useState(false);
   const [filterObj, setFilterObj] = useState<{
     name: string[] | null | undefined;
@@ -25,6 +27,14 @@ const Hotels = () => {
     queryKey: ["result"],
     queryFn: () => getSearchResultsFn(),
   });
+
+  // const jsonData = data?.results?.filter((each) =>
+  //   each?.rooms?.find((room) =>
+  //     room?.hotel?.district?.name
+  //       ?.toLowerCase()
+  //       ?.includes(params?.location?.toString())
+  //   )
+  // );
 
   return (
     <div className="max-w-[450px] 2xs:w-full px-4 mx-auto pt-7">
@@ -85,7 +95,7 @@ const Hotels = () => {
                       } else {
                         setFilterObj({
                           ...filterObj,
-                          name: [...filterObj.name, each],
+                          name: [...(filterObj.name || []), each],
                         });
                       }
                     }}
@@ -99,7 +109,7 @@ const Hotels = () => {
         </>
       )}
       <div className="flex flex-col gap-y-4 mt-4">
-        {data?.results?.map((each) => (
+        {data?.results?.map((each: any) => (
           <Hotel key={each?.id} details={each} />
         ))}
       </div>

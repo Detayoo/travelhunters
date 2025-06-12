@@ -1,22 +1,22 @@
 import Image from "next/image";
+import { useState } from "react";
 
 import FiveStarRating from "./Rating";
 import { formatMoney } from "@/helpers";
 import { HotelData } from "@/types";
 import { Heart } from "./Heart";
-import { useState } from "react";
 
 export const Hotel = ({ details }: { details: HotelData }) => {
   const [active, setActive] = useState(false);
 
   return (
     <div className="w-full min-h-[215px] rounded-[10px] flex bg-white overflow-hidden">
-      <div className="h-full min-w-[150px] relative">
+      <div className="min-h-full min-w-[150px] relative">
         <Image
           src={details?.exterior_photo[0]?.imgPath ?? ""}
           alt=""
           fill
-          className="object-top"
+          className="object-top object-cover"
           priority
         />
         <div className="absolute top-3 right-2">
