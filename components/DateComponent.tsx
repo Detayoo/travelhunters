@@ -90,7 +90,7 @@ export const DateComponent = ({
             if (handleBlur) handleBlur();
           }}
           onFocus={() => setFocus(true)}
-          selectsMultiple={true}
+          selectsMultiple={undefined}
           selected={selected}
           name={name}
           placeholderText={placeholder}
@@ -114,13 +114,6 @@ export const DateComponent = ({
           yearDropdownItemNumber={100}
           scrollableYearDropdown
           {...rest}
-        />
-        <Image
-          src="/icons/calendar.svg"
-          alt="calendar icon"
-          width={24}
-          height={24}
-          className="ml-auto mr-5"
         />
       </div>
       {error && <p className="error">Date is required</p>}

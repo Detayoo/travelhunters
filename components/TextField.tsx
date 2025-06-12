@@ -31,6 +31,7 @@ export const TextField = ({
   disabled?: boolean;
   onChange?: (e: any) => void;
   onKeyDown?: (e: any) => void;
+  [x: string]: unknown;
 }) => (
   <div className={`${divClass}`}>
     <div className="flex gap-[5px] items-center mb-1">
