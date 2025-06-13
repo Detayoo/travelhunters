@@ -19,6 +19,7 @@ export default function Document() {
           content="travel, trips, vacation, travel deals, travel guides, Travel Hunters"
         />
         {/* <link rel="icon" href="/favicon.ico" /> */}
+        
       </Head>
       <body className="antialiased">
         <Main />
