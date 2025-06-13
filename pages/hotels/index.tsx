@@ -1,13 +1,12 @@
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 
 import { getSearchResultsFn } from "@/services/queries";
 import { Hotel } from "@/components";
-
 import data from "../../data.json";
 import BudgetSlider from "@/components/BudgetSlider";
-import { useRouter } from "next/router";
 
 const filterables = ["Hotel", "Double Bed", "Apartments", "English"];
 
@@ -25,7 +24,12 @@ const Hotels = () => {
   });
   const { data: results } = useQuery({
     queryKey: ["result"],
-    queryFn: () => getSearchResultsFn(),
+    queryFn: () =>
+      getSearchResultsFn({
+        endDate: params?.endDate,
+        location: params?.location,
+        startDate: params?.startDate,
+      }),
   });
 
   // const jsonData = data?.results?.filter((each) =>

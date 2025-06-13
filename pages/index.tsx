@@ -12,8 +12,6 @@ const Home = () => {
   };
 
   const handleSubmit = (values: typeof initialValues) => {
-    // console.log(values);
-
     const { location, startDate, endDate } = values;
     let query: Partial<typeof initialValues> = {};
     if (location) query.location = location;
@@ -21,7 +19,6 @@ const Home = () => {
     // query.endDate = "12-06-2025";
     if (startDate) query.startDate = format(startDate, "dd-MM-yyyy");
     if (values?.endDate) query.endDate = format(endDate, "dd-MM-yyyy");
-
 
     Router.push({
       pathname: "hotels",
