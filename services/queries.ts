@@ -8,12 +8,14 @@ export const getSearchResultsFn = async ({
   startDate,
   minBudget,
   maxBudget,
+  type
 }: {
   endDate?: Param;
   location?: Param;
   startDate?: Param;
   minBudget?: Param;
   maxBudget?: Param;
+  type?: Param
 }) => {
   const params: any = {};
   if (location) params.location = location;
@@ -21,6 +23,7 @@ export const getSearchResultsFn = async ({
   if (endDate) params.endDate = endDate;
   if (minBudget) params.minBudget = minBudget;
   if (maxBudget) params.maxBudget = maxBudget;
+  if (type) params.type = type;
 
   const { data } = await baseApi.get("/hotel/hotels", {
     params,

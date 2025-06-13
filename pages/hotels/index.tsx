@@ -15,18 +15,14 @@ const Hotels = () => {
   const locationRef = useRef(null);
   const [minBudget, setMinBudget] = useState(5000);
   const [maxBudget, setMaxBudget] = useState(500000);
-  const [showFilter, setShowFilter] = useState(false);
   const [filterObj, setFilterObj] = useState<{
     name: string[] | null | undefined;
-    priceTo: string | null;
-    priceFrom: string | null;
   }>({
     name: null,
-    priceFrom: null,
-    priceTo: null,
   });
+  const [showFilter, setShowFilter] = useState(false);
   const { data: results, isFetching } = useQuery({
-    queryKey: ["result", params],
+    queryKey: ["result", params, filterObj?.name],
     queryFn: () =>
       getSearchResultsFn({
         endDate: params?.endDate,
@@ -34,6 +30,7 @@ const Hotels = () => {
         startDate: params?.startDate,
         minBudget: params?.minBudget ? params?.minBudget.toString() : null,
         maxBudget: params?.maxBudget ? params?.maxBudget.toString() : null,
+        type: params?.type ? params?.type.toString() : null,
       }),
   });
 
@@ -41,7 +38,24 @@ const Hotels = () => {
     if (locationRef.current && params?.location) {
       locationRef.current.value = params?.location?.toString() || "";
     }
-  }, [params?.location]);
+
+    if (params?.type) {
+      setFilterObj({
+        ...filterObj,
+        name: params?.type?.toString().split(","),
+      });
+    }
+
+    if (filterObj?.name?.length > 0) {
+      router.push({
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          type: filterObj?.name?.join(","),
+        },
+      });
+    }
+  }, [params, filterObj?.name]);
 
   const handleInputSubmission = (e) => {
     e?.preventDefault();
@@ -71,7 +85,6 @@ const Hotels = () => {
       </div>
     );
   };
-
 
   return (
     <div className="max-w-[450px] 2xs:w-full px-4 mx-auto pt-7">

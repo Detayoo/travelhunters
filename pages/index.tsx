@@ -31,7 +31,6 @@ const Home = () => {
     <div className="flex gap-x-4">
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {({ values, errors, touched, isValid, dirty, setFieldValue }) => {
-          console.log(values);
           return (
             <Form className="flex flex-col gap-y-7 mt-[50px] w-[450px] mx-auto xs:w-full 2xs:px-5">
               <div className="flex flex-col gap-y-7 bg-white rounded-[10px] outline-1 outline-gray-200 p-4 ">
