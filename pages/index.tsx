@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Router from "next/router";
+import Image from "next/image";
 import { Form, Formik } from "formik";
 import { format } from "date-fns";
-import { DateComponent, TextField } from "@/components";
-import Image from "next/image";
+
+import { DateComponent } from "@/components";
 
 const Home = () => {
   const [showDate, setShowDate] = useState(false);
@@ -14,12 +15,9 @@ const Home = () => {
   };
 
   const handleSubmit = (values: typeof initialValues) => {
-    console.log(values);
     const { location, startDate, endDate } = values;
     let query: Partial<typeof initialValues> = {};
     if (location) query.location = location;
-    // query.startDate = "01-05-2025";
-    // query.endDate = "12-06-2025";
     if (startDate) query.startDate = format(startDate, "dd-MM-yyyy");
     if (endDate) query.endDate = format(endDate, "dd-MM-yyyy");
 
@@ -28,6 +26,7 @@ const Home = () => {
       query,
     });
   };
+
   return (
     <div className="flex gap-x-4">
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>

@@ -14,7 +14,6 @@ const Hotels = () => {
   const router = useRouter();
   const params = router.query;
   const locationRef = useRef(null);
-  const [location, setLocation] = useState(params?.location);
   const [minBudget, setMinBudget] = useState(5000);
   const [maxBudget, setMaxBudget] = useState(500000);
   const [showFilter, setShowFilter] = useState(false);
@@ -28,22 +27,16 @@ const Hotels = () => {
     priceTo: null,
   });
   const { data: results } = useQuery({
-    queryKey: ["result", params, location],
+    queryKey: ["result", params],
     queryFn: () =>
       getSearchResultsFn({
         endDate: params?.endDate,
-        location: location,
+        location: params?.location,
         startDate: params?.startDate,
+        minBudget: params?.minBudget ? params?.minBudget.toString() : null,
+        maxBudget: params?.maxBudget ? params?.maxBudget.toString() : null,
       }),
   });
-
-  // const jsonData = data?.results?.filter((each) =>
-  //   each?.rooms?.find((room) =>
-  //     room?.hotel?.district?.name
-  //       ?.toLowerCase()
-  //       ?.includes(params?.location?.toString())
-  //   )
-  // );
 
   useEffect(() => {
     if (params?.location) {
@@ -54,7 +47,6 @@ const Hotels = () => {
   const handleInputSubmission = (e) => {
     e?.preventDefault();
     if (locationRef.current) {
-      setLocation(locationRef.current.value);
       router.push({
         pathname: router.pathname,
         query: {

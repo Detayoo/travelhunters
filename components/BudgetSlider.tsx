@@ -1,5 +1,5 @@
-import { useState } from "react";
-
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 export default function BudgetSlider({
   minBudget,
   maxBudget,
@@ -11,6 +11,20 @@ export default function BudgetSlider({
   setMinBudget: (value: number) => void;
   setMaxBudget: (value: number) => void;
 }) {
+  const router = useRouter();
+  const { query } = router;
+  useEffect(() => {
+    if (!minBudget && !maxBudget) return;
+    if (minBudget) query.minBudget = minBudget.toString();
+    if (maxBudget) query.maxBudget = maxBudget.toString();
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        ...query,
+      },
+    });
+  }, [minBudget, maxBudget]);
 
   return (
     <div className="border border-gray-200 p-4 rounded-[10px] text-center bg-white">
@@ -23,6 +37,7 @@ export default function BudgetSlider({
       </div>
 
       <div className="relative h-8 flex items-center justify-between px-2">
+        <div className="w-full h-[4px] bg-red-500 rounded absolute top-1/2 transform -translate-y-1/2 z-0"></div>
         <input
           type="range"
           min={5000}
@@ -32,7 +47,7 @@ export default function BudgetSlider({
           onChange={(e) =>
             setMinBudget(Math.min(Number(e.target.value), maxBudget - 10000))
           }
-          className="slider-thumb w-full absolute z-10 appearance-none bg-transparent pointer-events-auto"
+          className="slider-thumb w-full z-40 appearance-none bg-transparent pointer-events-auto"
         />
         <input
           type="range"
@@ -43,9 +58,8 @@ export default function BudgetSlider({
           onChange={(e) =>
             setMaxBudget(Math.max(Number(e.target.value), minBudget + 10000))
           }
-          className="slider-thumb w-full absolute z-10 appearance-none bg-transparent pointer-events-auto"
+          className="slider-thumb w-full z-20 appearance-none bg-transparent pointer-events-auto"
         />
-        <div className="w-full h-[4px] bg-red-500 rounded absolute top-1/2 transform -translate-y-1/2 z-0"></div>
       </div>
 
       <button className="bg-green-600 text-white font-semibold text-[13px] rounded-md px-14 py-2 mt-4 hover:bg-green-700">
