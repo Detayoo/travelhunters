@@ -1,4 +1,3 @@
-export * from "./TextField";
 export * from "./DateComponent";
 export * from "./Hotel";
 export * from "./Heart";
