@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-export default function BudgetSlider({
+export const BudgetSlider = ({
   minBudget,
   maxBudget,
   setMinBudget,
@@ -10,7 +10,7 @@ export default function BudgetSlider({
   maxBudget: number;
   setMinBudget: (value: number) => void;
   setMaxBudget: (value: number) => void;
-}) {
+}) => {
   const router = useRouter();
   const { query } = router;
   useEffect(() => {
@@ -67,4 +67,4 @@ export default function BudgetSlider({
       </button>
     </div>
   );
-}
+};

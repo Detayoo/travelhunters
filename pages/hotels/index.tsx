@@ -4,9 +4,8 @@ import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 
 import { getSearchResultsFn } from "@/services/queries";
-import { Hotel } from "@/components";
+import { Hotel, BudgetSlider, Loader } from "@/components";
 import data from "../../data.json";
-import BudgetSlider from "@/components/BudgetSlider";
 
 const filterables = ["Hotel", "Double Bed", "Apartments", "English"];
 
@@ -26,7 +25,7 @@ const Hotels = () => {
     priceFrom: null,
     priceTo: null,
   });
-  const { data: results } = useQuery({
+  const { data: results, isFetching } = useQuery({
     queryKey: ["result", params],
     queryFn: () =>
       getSearchResultsFn({
@@ -39,8 +38,8 @@ const Hotels = () => {
   });
 
   useEffect(() => {
-    if (params?.location) {
-      locationRef.current.value = params?.location?.toString();
+    if (locationRef.current && params?.location) {
+      locationRef.current.value = params?.location?.toString() || "";
     }
   }, [params?.location]);
 
@@ -56,6 +55,23 @@ const Hotels = () => {
       });
     }
   };
+
+  const renderList = () => {
+    if (isFetching)
+      return (
+        <div className="bg-white p-4 rounded-[10px]">
+          <Loader />
+        </div>
+      );
+    return (
+      <div className="flex flex-col gap-y-4 mt-4">
+        {data?.results?.map((each: any) => (
+          <Hotel key={each?.id} details={each} />
+        ))}
+      </div>
+    );
+  };
+
 
   return (
     <div className="max-w-[450px] 2xs:w-full px-4 mx-auto pt-7">
@@ -133,11 +149,7 @@ const Hotels = () => {
           />
         </>
       )}
-      <div className="flex flex-col gap-y-4 mt-4">
-        {data?.results?.map((each: any) => (
-          <Hotel key={each?.id} details={each} />
-        ))}
-      </div>
+      {renderList()}
     </div>
   );
 };
