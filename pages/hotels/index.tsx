@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
@@ -11,8 +11,12 @@ import BudgetSlider from "@/components/BudgetSlider";
 const filterables = ["Hotel", "Double Bed", "Apartments", "English"];
 
 const Hotels = () => {
-  const params = useRouter().query;
+  const router = useRouter();
+  const params = router.query;
+  const locationRef = useRef(null);
   const [location, setLocation] = useState(params?.location);
+  const [minBudget, setMinBudget] = useState(5000);
+  const [maxBudget, setMaxBudget] = useState(500000);
   const [showFilter, setShowFilter] = useState(false);
   const [filterObj, setFilterObj] = useState<{
     name: string[] | null | undefined;
@@ -24,7 +28,7 @@ const Hotels = () => {
     priceTo: null,
   });
   const { data: results } = useQuery({
-    queryKey: ["result", params],
+    queryKey: ["result", params, location],
     queryFn: () =>
       getSearchResultsFn({
         endDate: params?.endDate,
@@ -47,21 +51,35 @@ const Hotels = () => {
     }
   }, [params?.location]);
 
+  const handleInputSubmission = (e) => {
+    e?.preventDefault();
+    if (locationRef.current) {
+      setLocation(locationRef.current.value);
+      router.push({
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          location: locationRef.current.value,
+        },
+      });
+    }
+  };
+
   return (
     <div className="max-w-[450px] 2xs:w-full px-4 mx-auto pt-7">
-      <div className="flex flex-col gap-y-7 bg-white rounded-[10px] outline-1 outline-gray-200 p-4 ">
+      <form
+        onSubmit={handleInputSubmission}
+        className="flex flex-col gap-y-7 bg-white rounded-[10px] outline-1 outline-gray-200 p-4 "
+      >
         <div className="flex items-center gap-x-2 border border-gray-200 rounded-[10px] px-3">
           <Image src="/icons/location.jpg" alt="" height={30} width={30} />
           <div className="py-2 flex flex-col">
             <p className="text-[12px]">Where are you going?</p>
             <input
+              ref={locationRef}
               type="text"
               className="outline-none placeholder:text-[14px]"
               placeholder="Name or destination"
-              value={location}
-              onChange={(e) => {
-                setLocation(e.target.value);
-              }}
             />
           </div>{" "}
         </div>
@@ -70,16 +88,10 @@ const Hotels = () => {
           className="bg-green-500 h-11 w-full flex items-center justify-center rounded-[10px] text-[18px] font-[600] gap-x-2 text-white cursor-pointer"
           type="submit"
         >
-          <Image
-            src="/search.png"
-            alt=""
-            height={20}
-            width={20}
-            className=""
-          />
+          <Image src="/search.png" alt="" height={20} width={20} className="" />
           Search
         </button>
-      </div>
+      </form>
       <button
         onClick={() => setShowFilter(!showFilter)}
         type="button"
@@ -121,7 +133,12 @@ const Hotels = () => {
               ))}
             </div>
           </div>
-          <BudgetSlider />
+          <BudgetSlider
+            minBudget={minBudget}
+            maxBudget={maxBudget}
+            setMinBudget={setMinBudget}
+            setMaxBudget={setMaxBudget}
+          />
         </>
       )}
       <div className="flex flex-col gap-y-4 mt-4">

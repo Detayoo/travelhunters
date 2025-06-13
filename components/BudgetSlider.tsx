@@ -1,8 +1,16 @@
 import { useState } from "react";
 
-export default function BudgetSlider() {
-  const [minBudget, setMinBudget] = useState(5000);
-  const [maxBudget, setMaxBudget] = useState(500000);
+export default function BudgetSlider({
+  minBudget,
+  maxBudget,
+  setMinBudget,
+  setMaxBudget,
+}: {
+  minBudget: number;
+  maxBudget: number;
+  setMinBudget: (value: number) => void;
+  setMaxBudget: (value: number) => void;
+}) {
 
   return (
     <div className="border border-gray-200 p-4 rounded-[10px] text-center bg-white">
