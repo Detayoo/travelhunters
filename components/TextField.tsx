@@ -13,7 +13,6 @@ export const TextField = ({
   maxlength,
   disabled,
   error,
-  onChange,
   onKeyDown,
   ...rest
 }: {
@@ -29,7 +28,6 @@ export const TextField = ({
   borderClass?: string;
   maxlength?: string;
   disabled?: boolean;
-  onChange?: (e: any) => void;
   onKeyDown?: (e: any) => void;
   [x: string]: unknown;
 }) => (

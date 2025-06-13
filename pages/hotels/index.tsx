@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
@@ -12,6 +12,7 @@ const filterables = ["Hotel", "Double Bed", "Apartments", "English"];
 
 const Hotels = () => {
   const params = useRouter().query;
+  const [location, setLocation] = useState(params?.location);
   const [showFilter, setShowFilter] = useState(false);
   const [filterObj, setFilterObj] = useState<{
     name: string[] | null | undefined;
@@ -23,11 +24,11 @@ const Hotels = () => {
     priceTo: null,
   });
   const { data: results } = useQuery({
-    queryKey: ["result"],
+    queryKey: ["result", params],
     queryFn: () =>
       getSearchResultsFn({
         endDate: params?.endDate,
-        location: params?.location,
+        location: location,
         startDate: params?.startDate,
       }),
   });
@@ -40,6 +41,12 @@ const Hotels = () => {
   //   )
   // );
 
+  useEffect(() => {
+    if (params?.location) {
+      setLocation(params?.location?.toString());
+    }
+  }, [params?.location]);
+
   return (
     <div className="max-w-[450px] 2xs:w-full px-4 mx-auto pt-7">
       <div className="flex flex-col gap-y-7 bg-white rounded-[10px] outline-1 outline-gray-200 p-4 ">
@@ -51,15 +58,20 @@ const Hotels = () => {
               type="text"
               className="outline-none placeholder:text-[14px]"
               placeholder="Name or destination"
+              value={location}
+              onChange={(e) => {
+                setLocation(e.target.value);
+              }}
             />
           </div>{" "}
         </div>
+
         <button
           className="bg-green-500 h-11 w-full flex items-center justify-center rounded-[10px] text-[18px] font-[600] gap-x-2 text-white cursor-pointer"
           type="submit"
         >
           <Image
-            src="/icons/search.png"
+            src="/search.png"
             alt=""
             height={20}
             width={20}
