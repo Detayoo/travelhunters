@@ -47,7 +47,7 @@ const Hotels = () => {
 
   useEffect(() => {
     if (params?.location) {
-      setLocation(params?.location?.toString());
+      locationRef.current.value = params?.location?.toString();
     }
   }, [params?.location]);
 
